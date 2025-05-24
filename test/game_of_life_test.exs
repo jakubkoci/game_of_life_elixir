@@ -26,4 +26,30 @@ defmodule GameOfLifeTest do
     assert GameOfLife.next_cell_state(:dead, 3) == :live
     assert GameOfLife.next_cell_state(:dead, 4) == :dead
   end
+
+  test "Return list of neighbours coordinates" do
+    assert GameOfLife.get_neighbours({10, 10}) == [
+             {9, 9},
+             {10, 9},
+             {11, 9},
+             {9, 10},
+             {10, 10},
+             {11, 10},
+             {9, 11},
+             {10, 11},
+             {11, 11}
+           ]
+
+    assert GameOfLife.get_neighbours({20, 25}) == [
+             {19, 24},
+             {20, 24},
+             {21, 24},
+             {19, 25},
+             {20, 25},
+             {21, 25},
+             {19, 26},
+             {20, 26},
+             {21, 26}
+           ]
+  end
 end

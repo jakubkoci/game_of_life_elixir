@@ -16,6 +16,14 @@ defmodule GameOfLife do
     "Hello, #{name}!"
   end
 
+  def get_neighbours({x, y}) do
+    List.flatten([
+      Enum.map(-1..1, fn i -> {x + i, y - 1} end),
+      Enum.map(-1..1, fn i -> {x + i, y} end),
+      Enum.map(-1..1, fn i -> {x + i, y + 1} end)
+    ])
+  end
+
   def next_cell_state(current_state, count_of_living_neighbours) do
     next_state =
       case {current_state, count_of_living_neighbours} do
