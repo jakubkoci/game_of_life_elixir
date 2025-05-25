@@ -16,12 +16,18 @@ defmodule GameOfLife do
     "Hello, #{name}!"
   end
 
-  def get_neighbours({x, y}) do
-    List.flatten([
-      Enum.map(-1..1, fn i -> {x + i, y - 1} end),
-      Enum.map(-1..1, fn i -> {x + i, y} end),
-      Enum.map(-1..1, fn i -> {x + i, y + 1} end)
-    ])
+  def get_neighbours(cell) do
+    {x, y} = cell
+
+    grid =
+      List.flatten([
+        Enum.map(-1..1, fn i -> {x + i, y - 1} end),
+        Enum.map(-1..1, fn i -> {x + i, y} end),
+        Enum.map(-1..1, fn i -> {x + i, y + 1} end)
+      ])
+
+    neighbours = Enum.filter(grid, fn c -> c != cell end)
+    neighbours
   end
 
   def get_live_neighbours(world, cell) do

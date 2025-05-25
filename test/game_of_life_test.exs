@@ -33,7 +33,6 @@ defmodule GameOfLifeTest do
              {10, 9},
              {11, 9},
              {9, 10},
-             {10, 10},
              {11, 10},
              {9, 11},
              {10, 11},
@@ -45,7 +44,6 @@ defmodule GameOfLifeTest do
              {20, 24},
              {21, 24},
              {19, 25},
-             {20, 25},
              {21, 25},
              {19, 26},
              {20, 26},
@@ -53,11 +51,22 @@ defmodule GameOfLifeTest do
            ]
   end
 
-  test "Returns no living neighbours with empty world" do
+  test "Returns live neighbour of a dead cell" do
+    # empty world
     assert GameOfLife.get_live_neighbours([], {10, 10}) == []
+
+    # world with one live cell next to a dead cell
+    assert GameOfLife.get_live_neighbours([{9, 9}], {10, 10}) == [{9, 9}]
   end
 
-  test "Returns live neighbour" do
-    assert GameOfLife.get_live_neighbours([{9, 9}], {10, 10}) == [{9, 9}]
+  test "Returns live neighbours of a live cell" do
+    # world with three live cells, but only one is next to a live cell
+    assert GameOfLife.get_live_neighbours([{8, 8}, {9, 9}, {10, 10}], {10, 10}) == [{9, 9}]
+
+    # world with four live cells, but only two are next to a live cell
+    assert GameOfLife.get_live_neighbours([{8, 8}, {9, 9}, {10, 10}, {11, 11}], {10, 10}) == [
+             {9, 9},
+             {11, 11}
+           ]
   end
 end
