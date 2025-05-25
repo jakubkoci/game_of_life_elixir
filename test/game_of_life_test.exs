@@ -52,4 +52,12 @@ defmodule GameOfLifeTest do
              {21, 26}
            ]
   end
+
+  test "Returns no living neighbours with empty world" do
+    assert GameOfLife.get_live_neighbours([], {10, 10}) == []
+  end
+
+  test "Returns live neighbour" do
+    assert GameOfLife.get_live_neighbours([{9, 9}], {10, 10}) == [{9, 9}]
+  end
 end
