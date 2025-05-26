@@ -69,4 +69,16 @@ defmodule GameOfLifeTest do
              {11, 11}
            ]
   end
+
+  test "Returns dead neighbours of a cell" do
+    assert GameOfLife.get_dead_neighbours([{9, 9}], {10, 10}) == [
+             {10, 9},
+             {11, 9},
+             {9, 10},
+             {11, 10},
+             {9, 11},
+             {10, 11},
+             {11, 11}
+           ]
+  end
 end

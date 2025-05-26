@@ -39,6 +39,14 @@ defmodule GameOfLife do
     live_neighbours
   end
 
+  def get_dead_neighbours(world, cell) do
+    neighbours = get_neighbours(cell)
+
+    is_dead = fn cell -> !Enum.find(world, fn c -> c == cell end) end
+    live_neighbours = Enum.filter(neighbours, is_dead)
+    live_neighbours
+  end
+
   def next_cell_state(current_state, count_of_living_neighbours) do
     next_state =
       case {current_state, count_of_living_neighbours} do
