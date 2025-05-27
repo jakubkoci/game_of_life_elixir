@@ -81,4 +81,18 @@ defmodule GameOfLifeTest do
              {11, 11}
            ]
   end
+
+  describe "tick" do
+    test "on empty world returns empty world" do
+      assert GameOfLife.tick([]) == []
+    end
+
+    test "transforms three horizontal neighbours to vertical ones" do
+      assert GameOfLife.tick([{9, 10}, {10, 10}, {11, 10}]) == [
+               {10, 9},
+               {10, 10},
+               {10, 11}
+             ]
+    end
+  end
 end
