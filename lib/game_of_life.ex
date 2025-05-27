@@ -17,7 +17,7 @@ defmodule GameOfLife do
   end
 
   def tick(world) do
-    new_world =
+    survived_cells =
       Enum.reduce(world, [], fn cell, acc ->
         live_neighbours = Enum.count(get_live_neighbours(world, cell))
         next_state = next_cell_state(:live, live_neighbours)
@@ -30,23 +30,20 @@ defmodule GameOfLife do
 
     reproduced_cells =
       Enum.reduce(world, [], fn cell, acc ->
-        dead_neighbours = get_dead_neighbours(world, cell)
+        get_dead_neighbours(world, cell)
+        |> Enum.reduce([], fn cell, acc ->
+          live_neighbours = Enum.count(get_live_neighbours(world, cell))
+          next_state = next_cell_state(:dead, live_neighbours)
 
-        reproduced_cells =
-          Enum.reduce(dead_neighbours, [], fn cell, acc ->
-            live_neighbours = Enum.count(get_live_neighbours(world, cell))
-            next_state = next_cell_state(:dead, live_neighbours)
-
-            case next_state do
-              :live -> [cell | acc]
-              _ -> acc
-            end
-          end)
-
-        Enum.concat(acc, reproduced_cells)
+          case next_state do
+            :live -> [cell | acc]
+            _ -> acc
+          end
+        end)
+        |> Enum.concat(acc)
       end)
 
-    MapSet.union(MapSet.new(new_world), MapSet.new(reproduced_cells)) |> MapSet.to_list()
+    MapSet.union(MapSet.new(survived_cells), MapSet.new(reproduced_cells)) |> MapSet.to_list()
   end
 
   def get_neighbours(cell) do
