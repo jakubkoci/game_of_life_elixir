@@ -2,32 +2,28 @@ defmodule GameOfLifeTest do
   use ExUnit.Case
   doctest GameOfLife
 
-  test "Greets" do
-    assert GameOfLife.hello("Joe") == "Hello, Joe!"
-  end
-
-  test "Any live cell with fewer than two live neighbours dies, as if by underpopulation." do
+  test "live cell with fewer than two live neighbours dies" do
     assert GameOfLife.next_cell_state(:live, 0) == :dead
     assert GameOfLife.next_cell_state(:live, 1) == :dead
   end
 
-  test "Any live cell with two or three live neighbours lives on to the next generation." do
+  test "live cell with two or three live neighbours survives" do
     assert GameOfLife.next_cell_state(:live, 2) == :live
     assert GameOfLife.next_cell_state(:live, 3) == :live
   end
 
-  test "Any live cell with more than three live neighbours dies, as if by overpopulation." do
+  test "live cell with more than three live neighbours dies" do
     assert GameOfLife.next_cell_state(:live, 4) == :dead
     assert GameOfLife.next_cell_state(:live, 5) == :dead
   end
 
-  test "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction." do
+  test "dead cell with exactly three live neighbours becomes alive" do
     assert GameOfLife.next_cell_state(:dead, 2) == :dead
     assert GameOfLife.next_cell_state(:dead, 3) == :live
     assert GameOfLife.next_cell_state(:dead, 4) == :dead
   end
 
-  test "Return list of neighbours coordinates" do
+  test "return list of neighbours" do
     assert GameOfLife.get_neighbours({10, 10}) == [
              {9, 9},
              {10, 9},
@@ -51,7 +47,7 @@ defmodule GameOfLifeTest do
            ]
   end
 
-  test "Returns live neighbour of a dead cell" do
+  test "returns live neighbour of a dead cell" do
     # empty world
     assert GameOfLife.get_live_neighbours([], {10, 10}) == []
 
@@ -59,7 +55,7 @@ defmodule GameOfLifeTest do
     assert GameOfLife.get_live_neighbours([{9, 9}], {10, 10}) == [{9, 9}]
   end
 
-  test "Returns live neighbours of a live cell" do
+  test "returns live neighbours of a live cell" do
     # world with three live cells, but only one is next to a live cell
     assert GameOfLife.get_live_neighbours([{8, 8}, {9, 9}, {10, 10}], {10, 10}) == [{9, 9}]
 
@@ -70,7 +66,7 @@ defmodule GameOfLifeTest do
            ]
   end
 
-  test "Returns dead neighbours of a cell" do
+  test "returns dead neighbours of a cell" do
     assert GameOfLife.get_dead_neighbours([{9, 9}], {10, 10}) == [
              {10, 9},
              {11, 9},
