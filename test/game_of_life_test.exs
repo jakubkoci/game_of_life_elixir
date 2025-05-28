@@ -2,49 +2,18 @@ defmodule GameOfLifeTest do
   use ExUnit.Case
   doctest GameOfLife
 
-  test "live cell with fewer than two live neighbours dies" do
-    assert GameOfLife.next_cell_state(:live, 0) == :dead
-    assert GameOfLife.next_cell_state(:live, 1) == :dead
-  end
+  describe "tick" do
+    test "on empty world returns empty world" do
+      assert GameOfLife.tick([]) == []
+    end
 
-  test "live cell with two or three live neighbours survives" do
-    assert GameOfLife.next_cell_state(:live, 2) == :live
-    assert GameOfLife.next_cell_state(:live, 3) == :live
-  end
-
-  test "live cell with more than three live neighbours dies" do
-    assert GameOfLife.next_cell_state(:live, 4) == :dead
-    assert GameOfLife.next_cell_state(:live, 5) == :dead
-  end
-
-  test "dead cell with exactly three live neighbours becomes alive" do
-    assert GameOfLife.next_cell_state(:dead, 2) == :dead
-    assert GameOfLife.next_cell_state(:dead, 3) == :live
-    assert GameOfLife.next_cell_state(:dead, 4) == :dead
-  end
-
-  test "return list of neighbours" do
-    assert GameOfLife.get_neighbours({10, 10}) == [
-             {9, 9},
-             {10, 9},
-             {11, 9},
-             {9, 10},
-             {11, 10},
-             {9, 11},
-             {10, 11},
-             {11, 11}
-           ]
-
-    assert GameOfLife.get_neighbours({20, 25}) == [
-             {19, 24},
-             {20, 24},
-             {21, 24},
-             {19, 25},
-             {21, 25},
-             {19, 26},
-             {20, 26},
-             {21, 26}
-           ]
+    test "transforms three horizontal neighbours to vertical ones" do
+      assert GameOfLife.tick([{9, 10}, {10, 10}, {11, 10}]) == [
+               {10, 9},
+               {10, 10},
+               {10, 11}
+             ]
+    end
   end
 
   test "returns live neighbour of a dead cell" do
@@ -78,17 +47,48 @@ defmodule GameOfLifeTest do
            ]
   end
 
-  describe "tick" do
-    test "on empty world returns empty world" do
-      assert GameOfLife.tick([]) == []
-    end
+  test "return list of neighbours" do
+    assert GameOfLife.get_neighbours({10, 10}) == [
+             {9, 9},
+             {10, 9},
+             {11, 9},
+             {9, 10},
+             {11, 10},
+             {9, 11},
+             {10, 11},
+             {11, 11}
+           ]
 
-    test "transforms three horizontal neighbours to vertical ones" do
-      assert GameOfLife.tick([{9, 10}, {10, 10}, {11, 10}]) == [
-               {10, 9},
-               {10, 10},
-               {10, 11}
-             ]
-    end
+    assert GameOfLife.get_neighbours({20, 25}) == [
+             {19, 24},
+             {20, 24},
+             {21, 24},
+             {19, 25},
+             {21, 25},
+             {19, 26},
+             {20, 26},
+             {21, 26}
+           ]
+  end
+
+  test "live cell with fewer than two live neighbours dies" do
+    assert GameOfLife.evaluate_next_state(:live, 0) == :dead
+    assert GameOfLife.evaluate_next_state(:live, 1) == :dead
+  end
+
+  test "live cell with two or three live neighbours survives" do
+    assert GameOfLife.evaluate_next_state(:live, 2) == :live
+    assert GameOfLife.evaluate_next_state(:live, 3) == :live
+  end
+
+  test "live cell with more than three live neighbours dies" do
+    assert GameOfLife.evaluate_next_state(:live, 4) == :dead
+    assert GameOfLife.evaluate_next_state(:live, 5) == :dead
+  end
+
+  test "dead cell with exactly three live neighbours becomes alive" do
+    assert GameOfLife.evaluate_next_state(:dead, 2) == :dead
+    assert GameOfLife.evaluate_next_state(:dead, 3) == :live
+    assert GameOfLife.evaluate_next_state(:dead, 4) == :dead
   end
 end
