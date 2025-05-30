@@ -9,6 +9,26 @@ defmodule GameOfLife do
 
   """
 
+  def start() do
+    IO.puts("Hello game of life")
+    render([{3, 4}, {4, 4}, {5, 4}])
+  end
+
+  def render(world) do
+    for y <- 0..9 do
+      line =
+        Enum.to_list(0..9)
+        |> Enum.map(fn x ->
+          case is_alive(world, {x, y}) do
+            true -> "x "
+            _ -> "o "
+          end
+        end)
+
+      IO.puts(line)
+    end
+  end
+
   def tick(world) do
     survived_cells =
       Enum.reduce(world, [], fn cell, acc ->
@@ -41,19 +61,20 @@ defmodule GameOfLife do
 
   def get_live_neighbours(world, cell) do
     neighbours = get_neighbours(cell)
-
-    is_alive = fn cell -> Enum.find(world, fn c -> c == cell end) end
-    live_neighbours = Enum.filter(neighbours, is_alive)
-
-    live_neighbours
+    Enum.filter(neighbours, &is_alive(world, &1))
   end
 
   def get_dead_neighbours(world, cell) do
     neighbours = get_neighbours(cell)
+    Enum.filter(neighbours, &is_dead(world, &1))
+  end
 
-    is_dead = fn cell -> !Enum.find(world, fn c -> c == cell end) end
-    live_neighbours = Enum.filter(neighbours, is_dead)
-    live_neighbours
+  def is_alive(world, cell) do
+    Enum.any?(world, fn c -> c == cell end)
+  end
+
+  def is_dead(world, cell) do
+    not is_alive(world, cell)
   end
 
   def get_neighbours(cell) do
@@ -82,3 +103,5 @@ defmodule GameOfLife do
     next_state
   end
 end
+
+GameOfLife.start()
