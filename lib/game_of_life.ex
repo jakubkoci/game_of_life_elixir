@@ -4,15 +4,10 @@ defmodule GameOfLife do
 
   Todo
   - [x] Step-down rule
-  - [ ] Extract into modules
+  - [ ] Extract into modules to be able to test without run/render
   - [ ] Refactor next state to use one function
 
   """
-
-  def start() do
-    IO.puts("Hello game of life")
-    render([{3, 4}, {4, 4}, {5, 4}])
-  end
 
   def render(world) do
     for y <- 0..9 do
@@ -27,6 +22,8 @@ defmodule GameOfLife do
 
       IO.puts(line)
     end
+
+    IO.puts("\n")
   end
 
   def tick(world) do
@@ -103,5 +100,3 @@ defmodule GameOfLife do
     next_state
   end
 end
-
-GameOfLife.start()
