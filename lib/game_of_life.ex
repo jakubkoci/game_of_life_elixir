@@ -2,11 +2,6 @@ defmodule GameOfLife do
   @moduledoc """
   Documentation for `GameOfLife`.
 
-  Todo
-  - [x] Step-down rule
-  - [x] Extract into modules to be able to test without run/render
-  - [x] Refactor next state to use one function
-
   """
 
   def tick(world) do
