@@ -5,38 +5,32 @@ defmodule GameOfLife do
   Todo
   - [x] Step-down rule
   - [x] Extract into modules to be able to test without run/render
-  - [ ] Refactor next state to use one function
+  - [x] Refactor next state to use one function
 
   """
 
   def tick(world) do
     survived_cells =
-      Enum.reduce(world, [], fn cell, next_world ->
-        live_neighbours = Enum.count(get_live_neighbours(world, cell))
-        next_state = evaluate_next_state(:live, live_neighbours)
-
-        case next_state do
-          :live -> [cell | next_world]
-          _ -> next_world
-        end
-      end)
+      Enum.reduce(world, [], &update_world(world, &1, :live, &2))
 
     reproduced_cells =
       Enum.reduce(world, [], fn cell, next_world ->
         get_dead_neighbours(world, cell)
-        |> Enum.reduce([], fn cell, next_world ->
-          live_neighbours = Enum.count(get_live_neighbours(world, cell))
-          next_state = evaluate_next_state(:dead, live_neighbours)
-
-          case next_state do
-            :live -> [cell | next_world]
-            _ -> next_world
-          end
-        end)
+        |> Enum.reduce([], &update_world(world, &1, :dead, &2))
         |> Enum.concat(next_world)
       end)
 
     MapSet.union(MapSet.new(survived_cells), MapSet.new(reproduced_cells)) |> MapSet.to_list()
+  end
+
+  def update_world(world, cell, current_state, next_world) do
+    live_neighbours = Enum.count(get_live_neighbours(world, cell))
+    next_state = evaluate_next_state(current_state, live_neighbours)
+
+    case next_state do
+      :live -> [cell | next_world]
+      _ -> next_world
+    end
   end
 
   def get_live_neighbours(world, cell) do
