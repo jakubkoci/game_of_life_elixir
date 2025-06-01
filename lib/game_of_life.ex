@@ -4,53 +4,36 @@ defmodule GameOfLife do
 
   Todo
   - [x] Step-down rule
-  - [ ] Extract into modules to be able to test without run/render
+  - [x] Extract into modules to be able to test without run/render
   - [ ] Refactor next state to use one function
 
   """
 
-  def render(world) do
-    for y <- 0..9 do
-      line =
-        Enum.to_list(0..9)
-        |> Enum.map(fn x ->
-          case is_alive(world, {x, y}) do
-            true -> "x "
-            _ -> "o "
-          end
-        end)
-
-      IO.puts(line)
-    end
-
-    IO.puts("\n")
-  end
-
   def tick(world) do
     survived_cells =
-      Enum.reduce(world, [], fn cell, acc ->
+      Enum.reduce(world, [], fn cell, next_world ->
         live_neighbours = Enum.count(get_live_neighbours(world, cell))
         next_state = evaluate_next_state(:live, live_neighbours)
 
         case next_state do
-          :live -> [cell | acc]
-          _ -> acc
+          :live -> [cell | next_world]
+          _ -> next_world
         end
       end)
 
     reproduced_cells =
-      Enum.reduce(world, [], fn cell, acc ->
+      Enum.reduce(world, [], fn cell, next_world ->
         get_dead_neighbours(world, cell)
-        |> Enum.reduce([], fn cell, acc ->
+        |> Enum.reduce([], fn cell, next_world ->
           live_neighbours = Enum.count(get_live_neighbours(world, cell))
           next_state = evaluate_next_state(:dead, live_neighbours)
 
           case next_state do
-            :live -> [cell | acc]
-            _ -> acc
+            :live -> [cell | next_world]
+            _ -> next_world
           end
         end)
-        |> Enum.concat(acc)
+        |> Enum.concat(next_world)
       end)
 
     MapSet.union(MapSet.new(survived_cells), MapSet.new(reproduced_cells)) |> MapSet.to_list()

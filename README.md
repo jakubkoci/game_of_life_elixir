@@ -6,37 +6,6 @@
 mix compile && mix run -e "Main.start()
 ```
 
-You should see something like this:
-
-```
-Compiling 1 file (.ex)
-Generated game_of_life_elixir app
-Hello game of life
-
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o x o o o o o
-o o o o x o o o o o
-o o o o x o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-
-
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o x x x o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-o o o o o o o o o o
-```
-
 ## Run Tests
 
 ```sh
